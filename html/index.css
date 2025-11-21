@@ -23,6 +23,12 @@
     --input-btn-hover-color: #2B2B2B;
     --input-btn-hover-bg: white;
     --input-btn-hover-border: black;
+    --app-noteheader-bg: #2a2a2a;
+    --app-noteheader-btn-border: white;
+    --app-noteheader-btn-bg: white;
+    --app-noteheader-btn-color: black;
+    --app-noteheader-btn-hover-bg: transparent;
+    --app-noteheader-btn-hover-color: white;
 }
 
 /* ================== */
@@ -66,77 +72,6 @@ body {
     line-height: 9vh;
     margin-left: 10vw;
     user-select: none;
-}
-
-/* ================== */
-/* Login Tab */
-/* ================== */
-.input-text-label {
-    font-size: 1.8vh;
-    margin-bottom: 0.7vh;
-    margin-top: 3vh;
-    margin-left: 0.25vw;
-    user-select: none;
-}
-
-.input-textbox {
-    background: transparent;
-    border: 1px solid var(--input-text-border);
-    border-radius: 0 1vh 1vh 1vh;
-    padding: 1vh;
-    font-size: 1.1rem;
-    box-shadow: 2px 2px 7px var(--input-text-shadow);
-}
-.input-textbox:hover {
-    border-color: white;
-}
-
-.input-button {
-    background: var(--input-btn-bg);
-    box-shadow: 2px 2px 7px var(--input-text-shadow);
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-    border-radius: 1vh;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-    border: 1px solid var(--input-btn-border);
-}
-.input-button:hover {
-    color: var(--input-btn-hover-color);
-    background: var(--input-btn-hover-bg);
-    border: 1px solid var(--input-btn-hover-border);
-}
-
-#login-text {   
-    font-size: 5.5vh;
-    margin-bottom: 7vh;
-    margin-top: 24vh;
-    text-shadow: 8px 8px 5px #0e0e0e;
-    user-select: none;
-}
-
-#login-inputs {
-    margin: auto;
-    margin-bottom: 55vh;
-    text-align: left;
-    width: fit-content;
-    user-select: all;
-}
-
-.input-acc-btns {
-    display: flex;
-    margin: auto;
-}
-
-.input-button {
-    display: block;
-    width: 91.5%;
-    margin: auto;
-    width: 49%!important;
-    margin-top: 2vh!important;
-    margin-left: 0.5vh;
-    margin-right: 0.5vh;
 }
 
 /* ================== */
@@ -186,12 +121,133 @@ a:hover {
 .page-tab {
     display: none;
     position: absolute;
-    top: 10vh;
+    top: 7.5vh;
     width: 100vw;
     height: 90vh;
     margin: auto;
     justify-content: center;
-    display: flex;
     flex-direction: column;
     text-align: center;
+}
+
+.page-title-text {   
+    font-size: 5.5vh;
+    margin-bottom: 7vh;
+    margin-top: 26.5vh;
+    text-shadow: 8px 8px 5px #0e0e0e;
+    user-select: none;
+}
+
+/* ================== */
+/* Login Tab */
+/* ================== */
+.input-text-label {
+    font-size: 1.8vh;
+    margin-bottom: 0.7vh;
+    margin-top: 3vh;
+    margin-left: 0.25vw;
+    user-select: none;
+}
+
+.input-textbox {
+    background: transparent;
+    border: 1px solid var(--input-text-border);
+    border-radius: 0 1vh 1vh 1vh;
+    padding: 1vh;
+    font-size: 1.1rem;
+    box-shadow: 2px 2px 7px var(--input-text-shadow);
+}
+.input-textbox:hover {
+    border-color: white;
+}
+
+.input-button {
+    background: var(--input-btn-bg);
+    box-shadow: 2px 2px 7px var(--input-text-shadow);
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    border-radius: 1vh;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid var(--input-btn-border);
+}
+.input-button:hover {
+    color: var(--input-btn-hover-color);
+    background: var(--input-btn-hover-bg);
+    border: 1px solid var(--input-btn-hover-border);
+}
+
+#login-inputs {
+    margin: auto;
+    margin-bottom: 55vh;
+    text-align: left;
+    width: fit-content;
+    user-select: all;
+}
+
+.input-acc-btns {
+    display: flex;
+    margin: auto;
+}
+
+.input-button {
+    display: block;
+    width: 91.5%;
+    margin: auto;
+    width: 49%!important;
+    margin-top: 2vh!important;
+    margin-left: 0.5vh;
+    margin-right: 0.5vh;
+}
+
+/* ================== */
+/* App Tab */
+/* ================== */
+.app-noteheader-bar {
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1vh;
+    display: flex;
+    background: var(--app-noteheader-bg);
+    padding: 1vh;
+    border-radius: 1vh 1vh 0 0;
+}
+
+.app-noteheader-title {
+    font-size: 3vh;
+    margin-left: 10vw;
+}
+
+.app-noteheader-btns {
+    margin-left: auto;
+    margin-right: 7.5vw;
+}
+
+.app-noteheader-btn {
+    font-size: 2.5vh;
+    width: 4vh;
+    height: 4vh;
+    line-height: 0;
+    background: var(--app-noteheader-btn-bg);
+    color: var(--app-noteheader-btn-color);
+    font-weight: bolder;
+    border: 1px solid var(--app-noteheader-btn-border);
+    border-radius: 0.5vh;
+    cursor: pointer;
+    transform: translateY(0.2vh);
+}
+.app-noteheader-btn:hover {
+    background: var(--app-noteheader-btn-hover-bg);
+    color: var(--app-noteheader-btn-hover-color);
+}
+
+.notes-list {
+    width: 91.5vw;
+    height: 70vh;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0 0 1vh 1vh;
+    background: #232323;
 }
