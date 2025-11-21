@@ -23,12 +23,12 @@
     --input-btn-hover-color: #2B2B2B;
     --input-btn-hover-bg: white;
     --input-btn-hover-border: black;
-    --app-noteheader-bg: #2a2a2a;
-    --app-noteheader-btn-border: white;
-    --app-noteheader-btn-bg: white;
-    --app-noteheader-btn-color: black;
-    --app-noteheader-btn-hover-bg: transparent;
-    --app-noteheader-btn-hover-color: white;
+    --app-taskheader-bg: #2a2a2a;
+    --app-taskheader-btn-border: white;
+    --app-taskheader-btn-bg: white;
+    --app-taskheader-btn-color: black;
+    --app-taskheader-btn-hover-bg: transparent;
+    --app-taskheader-btn-hover-color: white;
     --app-tasks-table-border: #ffffff7a;
     --app-btn-delete-color: rgb(250, 91, 91);
     --app-btn-view-color: rgb(255, 80, 255);
@@ -211,43 +211,43 @@ a:hover {
 /* ================== */
 /* App Tab */
 /* ================== */
-.app-noteheader-bar {
+.app-taskheader-bar {
     width: 92vw;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 1vh;
     display: flex;
-    background: var(--app-noteheader-bg);
+    background: var(--app-taskheader-bg);
     padding: 1vh;
     border-radius: 1vh 1vh 0 0;
 }
 
-.app-noteheader-title {
+.app-taskheader-title {
     font-size: 3vh;
     margin-left: 10vw;
 }
 
-.app-noteheader-btns {
+.app-taskheader-btns {
     margin-left: auto;
     margin-right: 7.5vw;
 }
 
-.app-noteheader-btn {
+.app-taskheader-btn {
     font-size: 2.5vh;
     width: 4vh;
     height: 4vh;
     line-height: 0;
-    background: var(--app-noteheader-btn-bg);
-    color: var(--app-noteheader-btn-color);
+    background: var(--app-taskheader-btn-bg);
+    color: var(--app-taskheader-btn-color);
     font-weight: bolder;
-    border: 1px solid var(--app-noteheader-btn-border);
+    border: 1px solid var(--app-taskheader-btn-border);
     border-radius: 0.5vh;
     cursor: pointer;
     transform: translateY(0.2vh);
 }
-.app-noteheader-btn:hover {
-    background: var(--app-noteheader-btn-hover-bg);
-    color: var(--app-noteheader-btn-hover-color);
+.app-taskheader-btn:hover {
+    background: var(--app-taskheader-btn-hover-bg);
+    color: var(--app-taskheader-btn-hover-color);
 }
 
 .no-list-items {
@@ -325,7 +325,7 @@ a:hover {
 /* Mobile Responsive */
 /* ================== */
 @media screen and (max-width: 768px) {
-    .app-noteheader-bar,
+    .app-taskheader-bar,
     .tasks-list {
         width: 98vw;
     }
@@ -347,10 +347,10 @@ a:hover {
         margin-left: 5vw;
     }
 
-    .app-noteheader-title {
+    .app-taskheader-title {
         margin-left: 2vw;
     }
-    .app-noteheader-btns {
+    .app-taskheader-btns {
         margin-right: 2vw;
     }
 

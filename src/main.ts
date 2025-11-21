@@ -6,7 +6,7 @@ const _pageElementsSelectors = {
     "accToggleBtn": "#acc-toggle-btn",
     "usernameInput": "#username-input",
     "passwordInput": "#password-input",
-    "addNoteBtn": "#add-note-btn",
+    "addTaskBtn": "#add-task-btn",
     "returnToAppBtn": "#return-app-btn",
     "saveTaskBtn": "#save-task-btn",
     "deleteTaskBtn": "#delete-task-btn",
@@ -46,6 +46,10 @@ function switchTab(tabName: tabName) {
 
 pageElements.login.onclick = () => {
     switchTab("app");
+}
+
+pageElements.addTaskBtn.onclick = () => {
+    switchTab("task-editor");
 }
 
 pageElements.returnToAppBtn.onclick = () => {
