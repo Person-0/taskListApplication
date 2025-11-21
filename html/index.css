@@ -54,6 +54,7 @@ body {
     width: 100vw;
     height: 100vh;
     background: var(--site-bg);
+    overflow: hidden;
 }
 
 /* ================== */
@@ -250,9 +251,9 @@ a:hover {
 }
 
 .no-list-items {
-    width: 93.5vw;
+    width: auto;
     text-align: center;
-    background: var(--app-noteheader-bg);
+    background: transparent;
     padding-top: 1vh;
     padding-bottom: 1vh;
     margin-left: auto;
@@ -325,7 +326,6 @@ a:hover {
 /* ================== */
 @media screen and (max-width: 768px) {
     .app-noteheader-bar,
-    .no-list-items,
     .tasks-list {
         width: 98vw;
     }
@@ -336,6 +336,10 @@ a:hover {
 
     .list-item-time, .list-item-action-delete {
         display: none;
+    }
+
+    .list-item-action-view {
+        border-right: 1px solid var(--app-tasks-table-border);
     }
 
     #app-title {
