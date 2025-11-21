@@ -5,7 +5,8 @@ const _pageElementsIds = {
     "signup": "signup-login-btn",
     "accToggleBtn": "acc-toggle-btn",
     "usernameInput": "username-input",
-    "passwordInput": "password-input"
+    "passwordInput": "password-input",
+    "addNoteBtn": "add-note-btn"
 }
 
 type tabName = "login" | "app";

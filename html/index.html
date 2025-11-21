@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task List App</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=delete" />
 </head>
 
 <body>
@@ -30,10 +31,33 @@
         <div class="app-noteheader-bar">
             <p class="app-noteheader-title">My Notes</p>
             <div class="app-noteheader-btns">
-                <button class="app-noteheader-btn"> + </button>
+                <button class="app-noteheader-btn" id="add-note-btn"> + </button>
             </div>
         </div>
-        <div class="notes-list"></div>
+        <div class="no-list-items">
+            <p>No tasks added!</p>
+            <p>Click on the [+] button to add a task.</p>
+        </div>
+        <div class="tasks-list" style="display: none;">
+            <div class="list-item list-item-sno list-header">S.No.</div>
+            <div class="list-item list-item-title list-header">Title</div>
+            <div class="list-item list-item-time list-header">Date Added</div>
+            <div class="list-item list-item-action-delete list-header">&ThinSpace;</div>
+
+            <!-- Sample List items --> 
+
+            <div class="list-item list-item-sno">1.</div>
+            <div class="list-item list-item-title">Lorem ipsum dot sit amet</div>
+            <div class="list-item list-item-time">14/09/25</div>
+            <div class="list-item list-item-action-delete"><span class="material-symbols-outlined">delete</span></div>
+
+            <div class="list-item list-item-sno">2.</div>
+            <div class="list-item list-item-title">Lorem ipsum dot sit amet Lorem ipsum dot sit amet Lorem ipsum dot sit amet</div>
+            <div class="list-item list-item-time">15/09/25</div>
+            <div class="list-item list-item-action-delete"><span class="material-symbols-outlined">delete</span></div>
+
+            
+        </div>
     </div>
 
     <div class="footer">

@@ -29,6 +29,7 @@
     --app-noteheader-btn-color: black;
     --app-noteheader-btn-hover-bg: transparent;
     --app-noteheader-btn-hover-color: white;
+    --app-tasks-table-border: #ffffff7a;
 }
 
 /* ================== */
@@ -69,7 +70,7 @@ body {
 #app-title {
     font-size: 5.5vh;
     font-weight: bolder;
-    line-height: 9vh;
+    line-height: 10vh;
     margin-left: 10vw;
     user-select: none;
 }
@@ -121,7 +122,6 @@ a:hover {
 .page-tab {
     display: none;
     position: absolute;
-    top: 7.5vh;
     width: 100vw;
     height: 90vh;
     margin: auto;
@@ -133,7 +133,7 @@ a:hover {
 .page-title-text {
     font-size: 5vh;
     margin-bottom: 5vh;
-    margin-top: 26.5vh;
+    margin-top: 36.5vh;
     text-shadow: 8px 8px 5px #0e0e0e;
     user-select: none;
 }
@@ -243,11 +243,53 @@ a:hover {
     color: var(--app-noteheader-btn-hover-color);
 }
 
-.notes-list {
+.no-list-items {
     width: 91.5vw;
-    height: 70vh;
+    text-align: center;
+    background: var(--app-noteheader-bg);
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tasks-list {
+    width: 93vw;
     margin-left: auto;
     margin-right: auto;
     border-radius: 0 0 1vh 1vh;
-    background: #232323;
+    display: grid;
+    grid-template-columns: 6vw 68vw 14vw 4vw;
+}
+
+.list-item {
+    height: 5vh;
+    line-height: 5vh;
+    border-right: 1px solid var(--app-tasks-table-border);
+    border-bottom: 1px solid var(--app-tasks-table-border);
+}
+
+.material-symbols-outlined {
+    line-height: 5vh;
+}
+
+.list-header {
+    border-top: 1px solid var(--app-tasks-table-border);
+    text-align: center!important;
+    font-weight: bolder;
+    font-size: 0.8rem;
+}
+
+.list-item-sno {
+    border-left: 1px solid var(--app-tasks-table-border);
+    margin-left: 1vw;
+}
+
+.list-item-title {
+    padding: 0 !important;
+    padding-left: 2vw !important;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: transparent;
 }
