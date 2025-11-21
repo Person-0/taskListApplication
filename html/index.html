@@ -1,13 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List Application</title>
+    <title>Task List App</title>
+
 </head>
+
 <body>
-    
+    <div id="navigation-header">
+        <p id="app-title">Task List</p>
+    </div>
+
+    <div id="login-container">
+        <p id="login-text">Account</p>
+        <div id="login-inputs">
+            <p class="input-text-label">Username</p>
+            <input class="input-textbox" type="text" id="username-input">
+            <p class="input-text-label">Password</p>
+            <input class="input-textbox" type="password" id="password-input">
+            <div class="input-acc-btns">
+                <button class="input-button" id="submit-login-btn">Login</button>
+                <button class="input-button" id="signup-login-btn">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="landing-page" style="display: none;">
+        <link class="css_file" id="landingPageCSS" rel="stylesheet" href="./assets/landing.css">
+
+        <div id="user-info">
+            <span id="username-text">
+                <span class="bolder-text">Welcome, </span><span id="username-container"></span><br>
+            </span>
+            <span id="ip-text">
+                <span>Your IP: </span><span id="ipaddr-container" class="underlined-text"></span>
+            </span>
+        </div>
+        <div id="room-inputs">
+            <div class="room-input-container">
+                <p class="input-text-label">Enter Room ID</p>
+                <input class="input-textbox" type="text" id="roomid-input">
+                <button class="input-button" id="join-room-btn">Join Room</button>
+            </div>
+            <p id="or-text-separator">OR</p>
+            <div class="room-input-container">
+                <button class="input-button" id="create-room-btn">Create Room</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-text-item">
+            <a class="url-link" id="acc-toggle-btn">Login</a><span class="footer-sep">
+            |
+            </span><a class="url-link" href="./credits.html">Credits</a>
+        </div>
+    </div>
 
     <script src="../src/main.ts" type="module"></script>
 </body>
+
 </html>
