@@ -130,9 +130,9 @@ a:hover {
     text-align: center;
 }
 
-.page-title-text {   
-    font-size: 5.5vh;
-    margin-bottom: 7vh;
+.page-title-text {
+    font-size: 5vh;
+    margin-bottom: 5vh;
     margin-top: 26.5vh;
     text-shadow: 8px 8px 5px #0e0e0e;
     user-select: none;
