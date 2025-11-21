@@ -108,18 +108,6 @@ body {
     border: 1px solid var(--input-btn-hover-border);
 }
 
-#login-container {
-    position: absolute;
-    top: 10vh;
-    width: 100vw;
-    height: 90vh;
-    margin: auto;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
-
 #login-text {   
     font-size: 5.5vh;
     margin-bottom: 7vh;
@@ -190,4 +178,20 @@ a:hover {
     display: inline;
     margin-left: 0.5vw;
     margin-right: 0.5vw;
+}
+
+/* ================== */
+/* Tabs */
+/* ================== */
+.page-tab {
+    display: none;
+    position: absolute;
+    top: 10vh;
+    width: 100vw;
+    height: 90vh;
+    margin: auto;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
 }
