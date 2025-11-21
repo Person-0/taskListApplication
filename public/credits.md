@@ -6,6 +6,8 @@
 - - [Science Gothic](https://fonts.google.com/specimen/Science+Gothic/about)
   - License: [SIL Open Font License, Version 1.1](https://fonts.google.com/specimen/Science+Gothic/license)
 
+<br>
+
 ## Misc
 - [markedjs/marked](https://github.com/markedjs/marked)
     - Wonderful Markdown parser
