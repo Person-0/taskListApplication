@@ -52,4 +52,4 @@ pageElements.returnToAppBtn.onclick = () => {
     switchTab("app");
 }
 
-switchTab("task-editor");
+switchTab("login");
