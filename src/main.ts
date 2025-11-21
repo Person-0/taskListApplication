@@ -1,25 +1,34 @@
 import "../html/index.css";
 
-const _pageElementsIds = {
-    "login": "submit-login-btn",
-    "signup": "signup-login-btn",
-    "accToggleBtn": "acc-toggle-btn",
-    "usernameInput": "username-input",
-    "passwordInput": "password-input",
-    "addNoteBtn": "add-note-btn"
+const _pageElementsSelectors = {
+    "login": "#submit-login-btn",
+    "signup": "#signup-login-btn",
+    "accToggleBtn": "#acc-toggle-btn",
+    "usernameInput": "#username-input",
+    "passwordInput": "#password-input",
+    "addNoteBtn": "#add-note-btn",
+    "returnToAppBtn": "#return-app-btn",
+    "saveTaskBtn": "#save-task-btn",
+    "deleteTaskBtn": "#delete-task-btn",
+    "taskNameInput": "#task-name-input",
+    "taskDetailsInput": "#task-details-textinput",
+    "tasksList": ".tasks-list",
+    "taskCheckbox": ".task-checkbox",
+    "taskInfoDate": ".task-info-date",
+    "taskInfoSno": ".task-info-sno"
 }
 
-type tabName = "login" | "app";
-type PageElementName = keyof typeof _pageElementsIds;
+type tabName = "login" | "app" | "task-editor";
+type PageElementName = keyof typeof _pageElementsSelectors;
 
 const pageElements = {} as Record<PageElementName, HTMLElement>;
-for (const [name, id] of Object.entries(_pageElementsIds)) {
-    const el = document.getElementById(id);
+for (const [name, selector] of Object.entries(_pageElementsSelectors)) {
+    const el = document.querySelector(selector) as HTMLElement | null;
     if (el) {
         pageElements[name as PageElementName] = el;
     } else {
         pageElements[name as PageElementName] = document.createElement("button");
-        console.error("Button [" + name + "] with ID [" + id + "] was not found.");
+        console.error("Button [" + name + "] with selector [" + selector + "] was not found.");
     }
 }
 
@@ -39,4 +48,8 @@ pageElements.login.onclick = () => {
     switchTab("app");
 }
 
-switchTab("login");
+pageElements.returnToAppBtn.onclick = () => {
+    switchTab("app");
+}
+
+switchTab("task-editor");
