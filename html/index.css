@@ -32,6 +32,7 @@
     margin: 0;
     color: white;
     transition: all 0.5s;
+    font-family: var(--site-font);
 }
 
 body {
@@ -60,7 +61,6 @@ body {
 }
 
 #app-title {
-    font-family: var(--site-font);
     font-size: 5.5vh;
     font-weight: bolder;
     line-height: 9vh;
@@ -72,7 +72,6 @@ body {
 /* Login Tab */
 /* ================== */
 .input-text-label {
-    font-family: var(--site-font);
     font-size: 1.8vh;
     margin-bottom: 0.7vh;
     margin-top: 3vh;
@@ -93,7 +92,6 @@ body {
 }
 
 .input-button {
-    font-family: Science Gothic;
     background: var(--input-btn-bg);
     box-shadow: 2px 2px 7px var(--input-text-shadow);
     padding-top: 1vh;
@@ -110,7 +108,6 @@ body {
     border: 1px solid var(--input-btn-hover-border);
 }
 
-
 #login-container {
     position: absolute;
     top: 10vh;
@@ -123,8 +120,7 @@ body {
     text-align: center;
 }
 
-#login-text {
-    font-family: Science Gothic;
+#login-text {   
     font-size: 5.5vh;
     margin-bottom: 7vh;
     margin-top: 24vh;
@@ -158,7 +154,6 @@ body {
 /* ================== */
 /* Footer */
 /* ================== */
-
 .footer {
     height: 5vh;
     width: 100vw;
@@ -172,7 +167,6 @@ body {
 }
 
 .footer-text-item {
-    font-family: monospace;
     font-weight: 100;
     font-size: 2.25vh;
     margin: auto;
@@ -181,7 +175,7 @@ body {
 
 a {
     color: #ffffff;
-    font-family: var(--site-font);
+    
     text-decoration: none;
 }
 a:hover {
