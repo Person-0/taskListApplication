@@ -1,6 +1,7 @@
 // External Deps
 import express from "express";
 import { Client } from 'pg';
+import bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 
 // Local Deps
@@ -11,6 +12,7 @@ import { UUID } from "crypto";
 dotenv.config();
 
 const app = express();
+const _bcryptRounds = parseInt(process.env.bcrypt_hrounds || "5");
 
 const client = new Client({
     connectionString: process.env.postregConStr,
@@ -112,21 +114,34 @@ async function main() {
             if (queryData.authType === "0") {
                 // login
 
-                if(!usernameExists) {
+                if (!usernameExists) {
                     return res.send(JSON.stringify({
                         error: true,
                         message: "username does not exist"
                     }));
                 }
-                
-                const userData: any = await queries.getUserData("username", queryData.username);
-                if(userData && userData.password === queryData.password) {
-                    delete userData.password;
-                    return res.send(JSON.stringify({
-                        error: false,
-                        ...userData
-                    }));
+
+                let userData: any = await queries.getUserData("username", queryData.username);
+                if (userData) {
+                    if (bcrypt.compareSync(queryData.password, userData.password)) {
+                        delete userData.password;
+                        return res.send(JSON.stringify({
+                            error: false,
+                            ...userData
+                        }));
+                    } else {
+                        return res.send(JSON.stringify({
+                            error: true,
+                            message: "invalid password"
+                        }));
+                    }
                 }
+
+                return res.send(JSON.stringify({
+                    error: true,
+                    message: "unknown error"
+                }));
+
             } else if (queryData.authType === "1") {
                 // register
 
@@ -137,8 +152,11 @@ async function main() {
                     }));
                 }
 
-                const userData: any = await queries.addUser(queryData.username, queryData.password);
-                if(userData.password) {
+                const userData: any = await queries.addUser(
+                    queryData.username, 
+                    bcrypt.hashSync(queryData.password, _bcryptRounds)
+                );
+                if (userData.password) {
                     delete userData.password;
                 }
 

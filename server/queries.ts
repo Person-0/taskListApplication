@@ -38,7 +38,7 @@ class QueryBuilder {
     }
 
     getUserDataUsername(username: string) {
-        return `select * from ${this.tablename} where username like "${username}";`;
+        return `select * from ${this.tablename} where username = '${username}';`;
     }
 }
 
@@ -75,7 +75,7 @@ class QueryExecutor {
 
     async doesUsernameExist(username: string) {
         const result = await this.client.query(this.queryBuilder.getAllUsernames());
-        let exists = true;
+        let exists = false;
         if (this._validateArray(result.rows)) {
             for (const row of result.rows) {
                 if (row && row.username && row.username === username) {
@@ -97,8 +97,8 @@ class QueryExecutor {
             result = undefined;
         }
         if (result && this._validateArray(result.rows)) {
-            if (!(result.rows.length === 1)) {
-                console.warn("POSSIBLE DUPLICATE!! getUserData(): result.rows has length > 1");
+            if (result.rowCount && result.rowCount > 1) {
+                console.warn("POSSIBLE DUPLICATE!! getUserData(): result.rows has length > 1: ", result.rows);
             }
             return result.rows[0] as User;
         }
@@ -106,7 +106,7 @@ class QueryExecutor {
     }
 
     async addUser(username: string, password: string, tasksdata: string = "[]") {
-        let nextUID = 0;
+        let nextUID = 1;
         const result_maxuid = await this.client.query(this.queryBuilder.getMaxUID());
         if (this._validateArray(result_maxuid.rows)) {
             if (result_maxuid.rows[0] && result_maxuid.rows[0].max) {
