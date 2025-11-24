@@ -1,6 +1,7 @@
 import "../html/index.css";
 import { ValidatorClass } from "../server/validator";
 import { APIClass } from "./api";
+import { loadTasks, loadTaskEditor } from "./tasks";
 
 const API = new APIClass();
 
@@ -11,6 +12,7 @@ const _pageElementsSelectors = {
     "usernameInput": "#username-input",
     "passwordInput": "#password-input",
     "addTaskBtn": "#add-task-btn",
+    "noTasksDiv": ".no-list-items",
     "returnToAppBtn": "#return-app-btn",
     "saveTaskBtn": "#save-task-btn",
     "deleteTaskBtn": "#delete-task-btn",
@@ -24,8 +26,9 @@ const _pageElementsSelectors = {
 
 type tabName = "login" | "app" | "task-editor";
 type PageElementName = keyof typeof _pageElementsSelectors;
+export type pageElementsType = Record<PageElementName, HTMLElement>;
 
-const pageElements = {} as Record<PageElementName, HTMLElement>;
+const pageElements = {} as pageElementsType;
 for (const [name, selector] of Object.entries(_pageElementsSelectors)) {
     const el = document.querySelector(selector) as HTMLElement | null;
     if (el) {
@@ -35,6 +38,9 @@ for (const [name, selector] of Object.entries(_pageElementsSelectors)) {
         console.error("Button [" + name + "] with selector [" + selector + "] was not found.");
     }
 }
+
+Object.defineProperty(window, "pageElements", {value: pageElements});
+Object.defineProperty(window, "switchTab", {value: switchTab});
 
 function switchTab(tabName: tabName) {
     const toShowTab = document.querySelector("[tab-name=" + tabName + "]") as HTMLElement;
@@ -98,6 +104,7 @@ async function loadApp() {
         console.log("loadApp error: " + response.message);
         toggleLogin();
     } else {
+        loadTasks(response);
         switchTab("app");
     }
 }
@@ -107,7 +114,7 @@ pageElements.signup.onclick = authorize('signup');
 pageElements.accToggleBtn.onclick = toggleLogin;
 
 pageElements.addTaskBtn.onclick = () => {
-    switchTab("task-editor");
+    loadTaskEditor();
 }
 
 pageElements.returnToAppBtn.onclick = () => {
