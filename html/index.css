@@ -304,11 +304,11 @@ a:hover {
 
 .list-item-action-delete:hover {
     cursor: pointer;
-    background-color: var(--app-btn-view-color);
+    background-color: var(--app-btn-delete-color);
 }
 .list-item-action-view:hover {
     cursor: pointer;
-    background-color: var(--app-btn-delete-color);
+    background-color: var(--app-btn-view-color);
 }
 
 .list-item-title {
