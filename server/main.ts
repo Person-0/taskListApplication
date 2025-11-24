@@ -4,7 +4,7 @@ import { Client } from 'pg';
 import * as dotenv from "dotenv";
 
 // Local Deps
-import { QueryExecutor } from "./queries";
+import { QueryExecutor, User } from "./queries";
 import { authTokenManager, tokenRecord } from "./tempAuthTokens";
 import { UUID } from "crypto";
 
@@ -103,14 +103,49 @@ async function main() {
         res.send("hell0 w0rld.");
     })
 
-    app.get("/authorize", (req, res) => {
+    app.get("/authorize", async (req, res): Promise<any> => {
         const queryData = ensureQuery(req, res, ["username", "password", "authType"]);
-        if(queryData) {
-            // login
-            if(queryData.authType === "0") {
-            // register
-            } else if(queryData.authType === "1") {
+        if (queryData) {
 
+            const usernameExists = await queries.doesUsernameExist(queryData.username);
+
+            if (queryData.authType === "0") {
+                // login
+
+                if(!usernameExists) {
+                    return res.send(JSON.stringify({
+                        error: true,
+                        message: "username does not exist"
+                    }));
+                }
+                
+                const userData: any = await queries.getUserData("username", queryData.username);
+                if(userData && userData.password === queryData.password) {
+                    delete userData.password;
+                    return res.send(JSON.stringify({
+                        error: false,
+                        ...userData
+                    }));
+                }
+            } else if (queryData.authType === "1") {
+                // register
+
+                if (usernameExists) {
+                    return res.send(JSON.stringify({
+                        error: true,
+                        message: "username already exists"
+                    }));
+                }
+
+                const userData: any = await queries.addUser(queryData.username, queryData.password);
+                if(userData.password) {
+                    delete userData.password;
+                }
+
+                return res.send(JSON.stringify({
+                    error: false,
+                    ...userData
+                }));
             }
         }
     })
@@ -118,7 +153,7 @@ async function main() {
     app.get("/getMyData", async (req, res) => {
         const authResult = authorize(req, res);
         if (!authResult) return;
-        const result: any = await queries.getUserData(authResult.uid);
+        const result: any = await queries.getUserData("uid", authResult.uid);
         if (result?.password) {
             delete result.password;
         }
