@@ -13,7 +13,7 @@ export class authTokenManager {
     _findByUid(uid: number) {
         let result: null | tokenRecord = null;
         for(const record of this.tokens) {
-            if (record.uid === uid) {
+            if (record.uid == uid) {
                 result = record;
                 break;
             }

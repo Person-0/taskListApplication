@@ -12,12 +12,12 @@ export class ValidatorClass {
         return false;
     }
 
-    password_req = "Password must be atleast 7 characters in length and must contain a lowercase, uppercase, numeric and special character";
+    password_req = "Password must be atleast 6 characters in length and must contain a lowercase, uppercase, numeric and special character";
     password(text: string) {
         if(
             typeof text === 'string' &&
             text.length <= 100 &&
-            text.length > 7 &&
+            text.length >= 6 &&
             containsCharFrom("0123456789", text) &&
             containsCharFrom("`~!@#$%^&*()_+-=[]{}\\|;:'\"<,.>/?", text) &&
             containsCharFrom("ABCDEFGHIJKLMNOPQRSTUVWXYZ", text) &&

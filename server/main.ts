@@ -3,6 +3,8 @@ import express from "express";
 import { Client } from 'pg';
 import bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // Local Deps
 import { QueryExecutor, User } from "./queries";
@@ -14,6 +16,8 @@ dotenv.config();
 
 const app = express();
 const _bcryptRounds = parseInt(process.env.bcrypt_hrounds || "5");
+app.use(cors());
+app.use(cookieParser());
 
 const client = new Client({
     connectionString: process.env.postregConStr,
@@ -29,38 +33,25 @@ function log(...stuff: any[]) {
     console.log("[SERVER] ", ...stuff);
 }
 
-// simple cookie reader
-function readCookies(cookiesStr: string): Record<string, string> {
-    let cookies: any = false;
-    try {
-        cookies = cookiesStr.split(";");
-        cookies = cookies.map((e: string) => e.split("="));
-        cookies = Object.fromEntries(cookies);
-    } catch {
-        cookies = false;
-    }
-    if (typeof cookies === "object") {
-        return cookies;
-    } else {
-        return {};
-    }
-}
-
-function authorizeTokenFromCookies(
+function authorizeTokenFromReq(
     req: express.Request,
     res: express.Response
 ) {
-    const cookies = readCookies(req.headers["cookie"] || "");
-    if (cookies.auth) {
+    if (typeof req.headers['auth'] === "string") {
         try {
-            const [token, uid_str] = cookies.auth.split(",");
+            const [token, uid_str] = req.headers['auth'].split(",");
             const uid = parseInt(uid_str);
             if (authTokens.authorizeToken(uid, token as UUID)) {
                 return authTokens._findByUid(uid) as tokenRecord;
             }
         } catch (e) { }
     }
-    res.send("unauthorized");
+    res.send(
+        JSON.stringify({
+            error: true,
+            message: "unauthorized"
+        })
+    )
     return false;
 }
 
@@ -103,21 +94,18 @@ async function main() {
 
     log("finished.");
 
-    app.get("/", (req, res) => {
-        res.send("hell0 w0rld.");
-    })
-
     app.get("/authorize", async (req, res): Promise<any> => {
         const queryData = ensureQuery(req, res, ["username", "password", "authType"]);
         if (queryData) {
 
-            if(!(validator.username(queryData.username))) {
+            if (!(validator.username(queryData.username))) {
                 return res.send(JSON.stringify({
                     error: true,
                     message: "invalid credentials provided: " + validator.username_req
                 }))
             }
-            if(!(validator.password(queryData.password))) {
+
+            if (!(validator.password(queryData.password))) {
                 return res.send(JSON.stringify({
                     error: true,
                     message: "invalid credentials provided: " + validator.password_req
@@ -140,9 +128,10 @@ async function main() {
                 if (userData) {
                     if (bcrypt.compareSync(queryData.password, userData.password)) {
                         delete userData.password;
-                        res.cookie("auth", authTokens.getTokenCookieString(userData.uid));
                         return res.send(JSON.stringify({
                             error: false,
+                            token: authTokens.getTokenCookieString(userData.uid),
+                            tokenAge: parseInt(process.env.tokenExpiryMS as string),
                             ...userData
                         }));
                     } else {
@@ -176,9 +165,10 @@ async function main() {
                     delete userData.password;
                 }
 
-                res.cookie("auth", authTokens.getTokenCookieString(userData.uid));
                 return res.send(JSON.stringify({
                     error: false,
+                    token: authTokens.getTokenCookieString(userData.uid),
+                    tokenAge: parseInt(process.env.tokenExpiryMS as string),
                     ...userData
                 }));
             }
@@ -191,13 +181,22 @@ async function main() {
     })
 
     app.get("/getMyData", async (req, res) => {
-        const authResult = authorizeTokenFromCookies(req, res);
+        const authResult = authorizeTokenFromReq(req, res);
         if (!authResult) return;
         const result: any = await queries.getUserData("uid", authResult.uid);
         if (result?.password) {
             delete result.password;
         }
         res.send(JSON.stringify(result));
+    })
+
+    app.get("/logout", async (req, res) => {
+        const authResult = authorizeTokenFromReq(req, res);
+        if (!authResult) return;
+        authTokens._removeTokenRecord(authResult.uid);
+        res.send(JSON.stringify({
+            error: false
+        }));
     })
 
     log("starting API server...");

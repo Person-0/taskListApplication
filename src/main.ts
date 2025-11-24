@@ -1,4 +1,8 @@
 import "../html/index.css";
+import { ValidatorClass } from "../server/validator";
+import { APIClass } from "./api";
+
+const API = new APIClass();
 
 const _pageElementsSelectors = {
     "login": "#submit-login-btn",
@@ -44,9 +48,63 @@ function switchTab(tabName: tabName) {
     }
 }
 
-pageElements.login.onclick = () => {
-    switchTab("app");
+async function toggleLogin() {
+    if(localStorage.getItem("token")) {
+        await API.logout();
+        localStorage.clear();
+    }
+    location.href = "/";
 }
+
+const validator = new ValidatorClass();
+const authorize = (type: 'login' | 'signup') => async () => {
+    const qparams = new URLSearchParams();
+
+    const authType = type === 'signup' ? '1' : '0';
+    qparams.append("authType", authType);
+
+    const username = (pageElements.usernameInput as HTMLInputElement).value;
+    if (!(validator.username(username))) {
+        return;
+    }
+    qparams.append("username", username);
+
+    const password = (pageElements.passwordInput as HTMLInputElement).value;
+    if (!(validator.password(password))) {
+        return;
+    }
+    qparams.append("password", password);
+
+    const response = await API.authorize(qparams.toString());
+
+    if (response.error) {
+        // creds invalid and stuff
+        console.log("authorize error: ", response.message);
+    } else {
+        if (response.token && response.tokenAge) {
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("tokenExpiry", (Date.now() + parseInt(response.tokenAge)).toString());
+            await loadApp();
+        } else {
+            alert("authorize error: auth token / token age not provided!");
+        }
+    }
+}
+
+async function loadApp() {
+    pageElements.accToggleBtn.innerHTML = "Logout";
+    const response = await API.getMyData();
+    if(response.error) {
+        console.log("loadApp error: " + response.message);
+        toggleLogin();
+    } else {
+        switchTab("app");
+    }
+}
+
+pageElements.login.onclick = authorize('login');
+pageElements.signup.onclick = authorize('signup');
+pageElements.accToggleBtn.onclick = toggleLogin;
 
 pageElements.addTaskBtn.onclick = () => {
     switchTab("task-editor");
@@ -56,4 +114,8 @@ pageElements.returnToAppBtn.onclick = () => {
     switchTab("app");
 }
 
-switchTab("login");
+if(localStorage.getItem("token")) {
+    loadApp();
+} else {
+    switchTab("login");
+}
