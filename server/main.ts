@@ -5,6 +5,8 @@ import * as dotenv from "dotenv";
 
 // Local Deps
 import { QueryExecutor } from "./queries";
+import { authTokenManager, tokenRecord } from "./tempAuthTokens";
+import { UUID } from "crypto";
 
 dotenv.config();
 
@@ -15,6 +17,7 @@ const client = new Client({
     ssl: true // connection fails without this (econnreset)
 });
 const queries = new QueryExecutor(client, process.env.userDataTable as string);
+const authTokens = new authTokenManager();
 
 main().catch(r => console.log("main() encountered ", r));
 
@@ -22,7 +25,71 @@ function log(...stuff: any[]) {
     console.log("[SERVER] ", ...stuff);
 }
 
-async function main(){
+// simple cookie reader
+function readCookies(cookiesStr: string): Record<string, string> {
+    let cookies: any = false;
+    try {
+        cookies = cookiesStr.split(";");
+        cookies = cookies.map((e: string) => e.split("="));
+        cookies = Object.fromEntries(cookies);
+    } catch {
+        cookies = false;
+    }
+    if (typeof cookies === "object") {
+        return cookies;
+    } else {
+        return {};
+    }
+}
+
+function authorize(
+    req: express.Request,
+    res: express.Response
+) {
+    const cookies = readCookies(req.headers["cookie"] || "");
+    if (cookies.auth) {
+        try {
+            const [token, uid_str] = cookies.auth.split(",");
+            const uid = parseInt(uid_str);
+            if (authTokens.authorizeToken(uid, token as UUID)) {
+                return authTokens._findByUid(uid) as tokenRecord;
+            }
+        } catch (e) { }
+    }
+    res.send("unauthorized");
+    return false;
+}
+
+function ensureQuery(
+    req: express.Request,
+    res: express.Response,
+    params: string[]
+) {
+    if (req.query) {
+        let queryData: Record<string, string> = {};
+        let success = true;
+        for (const param of params) {
+            if (req.query[param]) {
+                queryData[param] = req.query[param] as string;
+            } else {
+                success = false;
+                break;
+            }
+        }
+        if (success) {
+            return queryData;
+        }
+    }
+    res.send(
+        JSON.stringify({
+            error: true,
+            message: "ensureQuery failed"
+        })
+    )
+    return false;
+}
+
+async function main() {
     log("connecting...");
     await client.connect();
     log("connected to db");
@@ -36,48 +103,30 @@ async function main(){
         res.send("hell0 w0rld.");
     })
 
-    app.get("/getUserData", async (req, res) => {
-        const query = ensureQuery(req, res, ["uid"]);
-        if(query) {
-            const result: any = await queries.getUserData(parseInt(query.uid));
-            if(result?.password){
-                delete result.password;
+    app.get("/authorize", (req, res) => {
+        const queryData = ensureQuery(req, res, ["username", "password", "authType"]);
+        if(queryData) {
+            // login
+            if(queryData.authType === "0") {
+            // register
+            } else if(queryData.authType === "1") {
+
             }
-            res.send(JSON.stringify(result));
         }
+    })
+
+    app.get("/getMyData", async (req, res) => {
+        const authResult = authorize(req, res);
+        if (!authResult) return;
+        const result: any = await queries.getUserData(authResult.uid);
+        if (result?.password) {
+            delete result.password;
+        }
+        res.send(JSON.stringify(result));
     })
 
     log("starting API server...");
     app.listen(process.env.API_PORT, () => {
         log("listening on port", process.env.API_PORT);
     })
-
-    function ensureQuery(
-        req: express.Request, 
-        res: express.Response, 
-        params: string[]
-    ) {
-        if(req.query){
-            let queryData: Record<string, string> = {};
-            let success = true;
-            for(const param of params){
-                if(req.query[param]) {
-                    queryData[param] = req.query[param] as string;
-                } else {
-                    success = false;
-                    break;
-                }
-            }
-            if(success) {
-                return queryData;
-            }
-        }
-        res.send(
-            JSON.stringify({
-                error: true,
-                message: "ensureQuery failed"
-            })
-        )
-        return false;
-    }
 }
