@@ -8,6 +8,7 @@ import * as dotenv from "dotenv";
 import { QueryExecutor, User } from "./queries";
 import { authTokenManager, tokenRecord } from "./tempAuthTokens";
 import { UUID } from "crypto";
+import { ValidatorClass } from "./validator";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ const client = new Client({
 });
 const queries = new QueryExecutor(client, process.env.userDataTable as string);
 const authTokens = new authTokenManager();
+const validator = new ValidatorClass();
 
 main().catch(r => console.log("main() encountered ", r));
 
@@ -109,6 +111,19 @@ async function main() {
         const queryData = ensureQuery(req, res, ["username", "password", "authType"]);
         if (queryData) {
 
+            if(!(validator.username(queryData.username))) {
+                return res.send(JSON.stringify({
+                    error: true,
+                    message: "invalid credentials provided: " + validator.username_req
+                }))
+            }
+            if(!(validator.password(queryData.password))) {
+                return res.send(JSON.stringify({
+                    error: true,
+                    message: "invalid credentials provided: " + validator.password_req
+                }))
+            }
+
             const usernameExists = await queries.doesUsernameExist(queryData.username);
 
             if (queryData.authType === "0") {
@@ -154,7 +169,7 @@ async function main() {
                 }
 
                 const userData: any = await queries.addUser(
-                    queryData.username, 
+                    queryData.username,
                     bcrypt.hashSync(queryData.password, _bcryptRounds)
                 );
                 if (userData.password) {
@@ -167,6 +182,11 @@ async function main() {
                     ...userData
                 }));
             }
+
+            return res.send(JSON.stringify({
+                error: true,
+                message: "no query data"
+            }));
         }
     })
 
