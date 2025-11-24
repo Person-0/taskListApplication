@@ -44,6 +44,11 @@ export class authTokenManager {
         return newRecord.token;
     }
 
+    getTokenCookieString(uid: number) {
+        const token = this.generateToken(uid);
+        return token + "," + uid.toString();
+    }
+
     authorizeToken(uid: number, token: UUID) {
         const tokenRecord = this._findByUid(uid);
         if(tokenRecord) {

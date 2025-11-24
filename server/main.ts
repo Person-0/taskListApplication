@@ -44,7 +44,7 @@ function readCookies(cookiesStr: string): Record<string, string> {
     }
 }
 
-function authorize(
+function authorizeTokenFromCookies(
     req: express.Request,
     res: express.Response
 ) {
@@ -125,6 +125,7 @@ async function main() {
                 if (userData) {
                     if (bcrypt.compareSync(queryData.password, userData.password)) {
                         delete userData.password;
+                        res.cookie("auth", authTokens.getTokenCookieString(userData.uid));
                         return res.send(JSON.stringify({
                             error: false,
                             ...userData
@@ -160,6 +161,7 @@ async function main() {
                     delete userData.password;
                 }
 
+                res.cookie("auth", authTokens.getTokenCookieString(userData.uid));
                 return res.send(JSON.stringify({
                     error: false,
                     ...userData
@@ -169,7 +171,7 @@ async function main() {
     })
 
     app.get("/getMyData", async (req, res) => {
-        const authResult = authorize(req, res);
+        const authResult = authorizeTokenFromCookies(req, res);
         if (!authResult) return;
         const result: any = await queries.getUserData("uid", authResult.uid);
         if (result?.password) {
