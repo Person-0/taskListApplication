@@ -12,6 +12,7 @@
 :root {
     --site-font: 'Science Gothic';
     --site-bg: rgb(29, 29, 29);
+    --toast-bg: #7d6b00;
     --navbar-bg: #181818;
     --navbar-border: black;
     --footer-bg: var(--navbar-bg);
@@ -55,6 +56,44 @@ body {
     height: 100vh;
     background: var(--site-bg);
     overflow: hidden;
+}
+
+#toast-display {
+    background: var(--toast-bg);
+    width: auto;
+    max-width: 35vw;
+    word-wrap: break-word;
+    overflow: hidden;
+    height: auto;
+    position: absolute;
+    right: 1vw;
+    top: 12vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+}
+
+.toastInfoIcon {
+    margin-right: 0.5vw;
+}
+
+@keyframes toast {
+    0% {
+        transform: translateX(30vw);
+        opacity: 0;
+    }
+    10% {
+        transform: translateX(0vw);
+        opacity: 1;
+    }
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* ================== */

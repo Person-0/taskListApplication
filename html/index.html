@@ -5,12 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task List App</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_back,delete,save,visibility" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
 <body>
     <div id="navigation-header">
         <p id="app-title">Task List</p>
+    </div>
+
+    <div id="toast-display">
+        <span class="material-symbols-outlined toastInfoIcon">info</span>
+        <span id="toast-text"></span>
     </div>
 
     <div class="page-tab" tab-name="login">
@@ -27,7 +32,7 @@
         </div>
     </div>
 
-    <div class="page-tab"  tab-name="app">
+    <div class="page-tab" tab-name="app">
         <div class="app-taskheader-bar">
             <p class="app-taskheader-title">My Notes</p>
             <div class="app-taskheader-btns">
@@ -45,9 +50,9 @@
             <div class="list-item list-item-time list-header">Date Added</div>
             <div class="list-item list-item-action-view list-header">&ThinSpace;</div>
             <div class="list-item list-item-action-delete list-header">&ThinSpace;</div>
-            
-            <!-- Sample List items --> 
-             <!--
+
+            <!-- Sample List items -->
+            <!--
 
             <div class="list-item list-item-checkbox">
                 <input type="checkbox" class="item-checkbox">
@@ -66,13 +71,16 @@
             <div class="list-item list-item-time">15/09/25</div>
             <div class="list-item list-item-action-view"><span class="material-symbols-outlined">visibility</span></div>
             <div class="list-item list-item-action-delete"><span class="material-symbols-outlined">delete</span></div>
-            --> 
-            
+            -->
+
         </div>
     </div>
 
-    <div class="page-tab"  tab-name="task-editor">
-        <div class="task-info"><p class="task-info-sno">#1</p> <p class="task-info-date">02/12/25</p></div>
+    <div class="page-tab" tab-name="task-editor">
+        <div class="task-info">
+            <p class="task-info-sno"></p>
+            <p class="task-info-date"></p>
+        </div>
         <div class="app-taskheader-bar">
             <input type="checkbox" class="task-checkbox">
             <input class="task-name-input" id="task-name-input" type="text" placeholder="Enter Task Name...">
@@ -94,7 +102,7 @@
     <div class="footer">
         <div class="footer-text-item">
             <a class="url-link" id="acc-toggle-btn">Login</a><span class="footer-sep">
-            |
+                |
             </span><a class="url-link" href="./credits.html">Credits</a>
         </div>
     </div>
