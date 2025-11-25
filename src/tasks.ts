@@ -142,8 +142,8 @@ function getCurrentSno() {
 
 function getDateString() {
     const date = new Date();
-    let day = date.getDay().toString().padStart(2, "0");
-    let month = date.getMonth().toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+    let month = (date.getMonth() + 1).toString().padStart(2, "0");
     let year = date.getFullYear().toString().slice(2, 4);
     return [day, month, year].join("/");
 }
