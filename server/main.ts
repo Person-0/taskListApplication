@@ -25,6 +25,9 @@ if(IS_PROD) {
     log("PROD detected. Hosting static files.");
     app.use(express.static(path.join(process.cwd(), "dist")));
     app.use(express.static(path.join(process.cwd(), "public")));
+    app.get("/credits.html", (req, res) => {
+        res.sendFile(path.join(process.cwd(), "html/credits.html"));
+    })
 }
 
 const client = new Client({

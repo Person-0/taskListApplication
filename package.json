@@ -6,7 +6,7 @@
     "start": "vite",
     "start:server": "npm run build:server && node dist-server/main.js",
     "build:server": "tsup --config tsup.server.config.ts",
-    "build": "npm run build:server && vite build",
+    "build": "rimraf dist && npm run build:server && vite build",
     "start:prod": "npm run start:server prod"
   },
   "devDependencies": {
