@@ -1,4 +1,3 @@
-import "../html/index.css";
 import { APIClass } from "./api";
 import { loadTasks, loadTaskEditor } from "./tasks";
 import { toast } from "./toast";
@@ -92,6 +91,8 @@ const authorize = (type: 'login' | 'signup') => async () => {
         } else {
             alert("authorize error: auth token / token age not provided!");
         }
+    } else {
+        toast("unkown auth error");
     }
 }
 

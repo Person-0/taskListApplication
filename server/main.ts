@@ -4,6 +4,7 @@ import { Client } from 'pg';
 import bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 import cookieParser from "cookie-parser";
 
 // Local Deps
@@ -12,12 +13,19 @@ import { authTokenManager, tokenRecord } from "./tempAuthTokens";
 import { UUID } from "crypto";
 import { ValidatorClass } from "./validator";
 
+const IS_PROD = process.argv[2] === "prod";
 dotenv.config();
 
 const app = express();
 const _bcryptRounds = parseInt(process.env.bcrypt_hrounds || "5");
 app.use(cors());
 app.use(cookieParser());
+
+if(IS_PROD) {
+    log("PROD detected. Hosting static files.");
+    app.use(express.static(path.join(process.cwd(), "dist")));
+    app.use(express.static(path.join(process.cwd(), "public")));
+}
 
 const client = new Client({
     connectionString: process.env.postregConStr,
@@ -94,11 +102,11 @@ async function main() {
 
     log("finished.");
 
-    app.get("/", (req, res) => {
+    app.get("/api/", (req, res) => {
         res.send("hell0 w0rld");
     })
 
-    app.get("/authorize", async (req, res): Promise<any> => {
+    app.get("/api/authorize", async (req, res): Promise<any> => {
         const queryData = ensureQuery(req, res, ["username", "password", "authType"]);
         if (queryData) {
 
@@ -184,7 +192,7 @@ async function main() {
         }
     })
 
-    app.get("/getMyData", async (req, res) => {
+    app.get("/api/getMyData", async (req, res) => {
         const authResult = authorizeTokenFromReq(req, res);
         if (!authResult) return;
         const result: any = await queries.getUserData("uid", authResult.uid);
@@ -194,7 +202,7 @@ async function main() {
         res.send(JSON.stringify(result));
     })
 
-    app.get("/setMyTasks", async (req, res) => {
+    app.get("/api/setMyTasks", async (req, res) => {
         const qdata = ensureQuery(req, res, ["tasksdata"]);
         const authResult = authorizeTokenFromReq(req, res);
         if (!authResult) return;
@@ -218,7 +226,7 @@ async function main() {
         }));
     })
 
-    app.get("/logout", async (req, res) => {
+    app.get("/api/logout", async (req, res) => {
         const authResult = authorizeTokenFromReq(req, res);
         if (!authResult) return;
         authTokens._removeTokenRecord(authResult.uid);

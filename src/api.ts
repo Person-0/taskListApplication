@@ -2,7 +2,7 @@ import { ValidatorClass } from "../server/validator";
 const validator = new ValidatorClass();
 
 export class APIClass {
-    api_url = "http://" + location.hostname + ":8080";
+    api_url = "http://" + location.hostname + ":8080/api";
 
     _authedFetch(url: string) {
         return fetch(url, {
@@ -23,12 +23,12 @@ export class APIClass {
         qparams.append("authType", authType);
 
         if (!(validator.username(username))) {
-            return {error: "invalid username"};
+            return {error: true, message: "invalid username"};
         }
         qparams.append("username", username);
 
         if (!(validator.password(password))) {
-            return {error: "invalid password"};
+            return {error: true, message: "invalid password"};
         }
         qparams.append("password", password);
 

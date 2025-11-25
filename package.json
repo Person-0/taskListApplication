@@ -3,12 +3,11 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "start": "npm run dev",
+    "start": "vite",
     "start:server": "npm run build:server && node dist-server/main.js",
     "build:server": "tsup --config tsup.server.config.ts",
-    "build": "npm run build:server && tsc && vite build",
-    "preview": "vite preview"
+    "build": "npm run build:server && vite build",
+    "start:prod": "npm run build && npm run start:server prod"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
