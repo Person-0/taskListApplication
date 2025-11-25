@@ -1,0 +1,498 @@
+/* ================== */
+/* Fonts */
+/* ================== */
+@font-face {
+    font-family: 'Science Gothic';
+    src: url(./assets/ScienceGothic-VariableFont_CTRS,slnt,wdth,wght.ttf);
+}
+
+/* ================== */
+/* Color Config */
+/* ================== */
+:root {
+    --site-font: 'Science Gothic';
+    --site-bg: rgb(29, 29, 29);
+    --toast-bg: #7d6b00;
+    --navbar-bg: #181818;
+    --navbar-border: black;
+    --footer-bg: var(--navbar-bg);
+    --footer-border: black;
+    --input-text-border: #e0e0e05c;
+    --input-text-shadow: rgb(10 10 10 / 50%);
+    --input-btn-bg: #181818;
+    --input-btn-border: #ffffff4a;
+    --input-btn-hover-color: #2B2B2B;
+    --input-btn-hover-bg: white;
+    --input-btn-hover-border: black;
+    --app-taskheader-bg: #2a2a2a;
+    --app-taskheader-btn-border: white;
+    --app-taskheader-btn-bg: white;
+    --app-taskheader-btn-color: black;
+    --app-taskheader-btn-hover-bg: transparent;
+    --app-taskheader-btn-hover-color: white;
+    --app-tasks-table-border: #ffffff7a;
+    --app-btn-delete-color: rgb(250, 91, 91);
+    --app-btn-view-color: rgb(255, 80, 255);
+    --save-task-btn-color: rgb(110, 255, 110);
+    --task-details-input-border: white;
+}
+
+/* ================== */
+/* Misc */
+/* ================== */
+* {
+    margin: 0;
+    color: white;
+    transition: all 0.5s;
+    font-family: var(--site-font);
+}
+
+body {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    background: var(--site-bg);
+    overflow: hidden;
+}
+
+#toast-display {
+    background: var(--toast-bg);
+    width: auto;
+    max-width: 35vw;
+    word-wrap: break-word;
+    overflow: hidden;
+    height: auto;
+    position: absolute;
+    right: 1vw;
+    top: 12vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    opacity: 0;
+}
+
+.toastInfoIcon {
+    margin-right: 0.5vw;
+}
+
+@keyframes toast {
+    0% {
+        transform: translateX(30vw);
+        opacity: 0;
+    }
+    10% {
+        transform: translateX(0vw);
+        opacity: 1;
+    }
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ================== */
+/* Header & Title */
+/* ================== */
+#navigation-header {
+    display: flex;
+    height: 10vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: auto;
+    background: var(--navbar-bg);
+    border-bottom: 1px solid var(--navbar-border);
+}
+
+#app-title {
+    font-size: 5.5vh;
+    font-weight: bolder;
+    line-height: 10vh;
+    margin-left: 10vw;
+    user-select: none;
+}
+
+/* ================== */
+/* Footer */
+/* ================== */
+.footer {
+    height: 5vh;
+    width: 100vw;
+    background: var(--footer-bg);
+    border-top: 1px solid var(--footer-border);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.footer-text-item {
+    font-weight: 100;
+    font-size: 2.25vh;
+    margin: auto;
+    margin-right: 2vw;
+}
+
+a {
+    color: #ffffff;
+    
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+#acc-toggle-btn {
+    cursor: pointer!important;
+}
+
+.footer-sep {
+    display: inline;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+}
+
+/* ================== */
+/* Tabs */
+/* ================== */
+.page-tab {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 75vh;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    justify-content: start;
+    flex-direction: column;
+    text-align: center;
+}
+
+.page-title-text {
+    font-size: 5vh;
+    margin-bottom: 5vh;
+    margin-top: 5vh;
+    text-shadow: 8px 8px 5px #0e0e0e;
+    user-select: none;
+}
+
+/* ================== */
+/* Login Tab */
+/* ================== */
+.input-text-label {
+    font-size: 1.8vh;
+    margin-bottom: 0.7vh;
+    margin-top: 3vh;
+    margin-left: 0.25vw;
+    user-select: none;
+}
+
+.input-textbox {
+    background: transparent;
+    border: 1px solid var(--input-text-border);
+    border-radius: 0 1vh 1vh 1vh;
+    padding: 1vh;
+    font-size: 1.1rem;
+    box-shadow: 2px 2px 7px var(--input-text-shadow);
+}
+.input-textbox:hover {
+    border-color: white;
+}
+
+.input-button {
+    background: var(--input-btn-bg);
+    box-shadow: 2px 2px 7px var(--input-text-shadow);
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    border-radius: 1vh;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid var(--input-btn-border);
+}
+.input-button:hover {
+    color: var(--input-btn-hover-color);
+    background: var(--input-btn-hover-bg);
+    border: 1px solid var(--input-btn-hover-border);
+}
+
+#login-inputs {
+    margin: auto;
+    margin-bottom: 55vh;
+    text-align: left;
+    width: fit-content;
+    user-select: all;
+}
+
+.input-acc-btns {
+    display: flex;
+    margin: auto;
+}
+
+.input-button {
+    display: block;
+    width: 91.5%;
+    margin: auto;
+    width: 49%!important;
+    margin-top: 2vh!important;
+    margin-left: 0.5vh;
+    margin-right: 0.5vh;
+}
+
+/* ================== */
+/* App Tab */
+/* ================== */
+.app-taskheader-bar {
+    width: 92vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1vh;
+    display: flex;
+    background: var(--app-taskheader-bg);
+    padding: 1vh;
+    border-radius: 1vh 1vh 0 0;
+}
+
+.app-taskheader-title {
+    font-size: 3vh;
+    margin-left: 10vw;
+}
+
+.app-taskheader-btns {
+    margin-left: auto;
+    margin-right: 7.5vw;
+}
+
+.app-taskheader-btn {
+    font-size: 2.5vh;
+    width: 4vh;
+    height: 4vh;
+    line-height: 0;
+    background: var(--app-taskheader-btn-bg);
+    color: var(--app-taskheader-btn-color);
+    font-weight: bolder;
+    border: 1px solid var(--app-taskheader-btn-border);
+    border-radius: 0.5vh;
+    cursor: pointer;
+    transform: translateY(0.2vh);
+}
+.app-taskheader-btn:hover {
+    background: var(--app-taskheader-btn-hover-bg);
+    color: var(--app-taskheader-btn-hover-color);
+}
+
+.no-list-items {
+    width: auto;
+    text-align: center;
+    background: transparent;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tasks-list {
+    width: 93vw;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0 0 1vh 1vh;
+    display: grid;
+    grid-template-columns: 4.5vw 5vw 1fr 11vw 3vw 3vw;
+}
+
+.list-item {
+    height: 5vh;
+    line-height: 5vh;
+    border-right: 1px solid var(--app-tasks-table-border);
+    border-bottom: 1px solid var(--app-tasks-table-border);
+}
+
+.material-symbols-outlined {
+    line-height: 5vh;
+    color: inherit;
+}
+
+.list-header {
+    border-top: 1px solid var(--app-tasks-table-border);
+    text-align: center!important;
+    font-weight: bolder;
+    font-size: 0.8rem;
+}
+
+.list-item-checkbox {
+    border-left: 1px solid var(--app-tasks-table-border);
+}
+
+.list-item-action-view {
+    border-right: none;
+}
+
+.item-checkbox {
+    width: 75%;
+    height: 75%;
+    transform: translateY(0.5vh);
+}
+
+.list-item-action-delete:hover {
+    cursor: pointer;
+    background-color: var(--app-btn-delete-color);
+}
+.list-item-action-view:hover {
+    cursor: pointer;
+    background-color: var(--app-btn-view-color);
+}
+
+.list-item-title {
+    padding: 0 !important;
+    padding-left: 2vw !important;
+    text-align: left;
+    background: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ================== */
+/* Mobile Responsive */
+/* ================== */
+@media screen and (max-width: 768px) {
+    .app-taskheader-bar,
+    .tasks-list {
+        width: 98vw;
+    }
+
+    .tasks-list {
+        grid-template-columns: 10vw 12vw 1fr 12vw;
+    }
+
+    .list-item-time, .list-item-action-delete {
+        display: none;
+    }
+
+    .list-item-action-view {
+        border-right: 1px solid var(--app-tasks-table-border);
+    }
+
+    #app-title {
+        font-size: 4vh;
+        margin-left: 5vw;
+    }
+
+    .app-taskheader-title {
+        margin-left: 2vw;
+    }
+    .app-taskheader-btns {
+        margin-right: 2vw;
+    }
+
+    .list-item-sno {
+        margin-left: 0;
+        text-align: center;
+        padding-left: 0;
+    }
+    
+    .list-item, .input-textbox, .input-button {
+        font-size: 1rem; 
+    }
+
+    .list-header {
+        font-size: 0.7rem; 
+    }
+}
+
+/* ================== */
+/* Task Editor Tab */
+/* ================== */
+.app-headerbtn {
+    padding-left: 1vw;
+    padding-right: 1vw;
+    cursor: pointer;
+    margin: auto;
+    border-radius: 1vw;
+}
+.app-headerbtn:hover {
+    background-color: var(--app-btn-delete-color);;
+}
+
+.task-name-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding-left: 3vw;
+    padding-right: 3vw;
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.task-checkbox {
+    height: 3vh;
+    width: 3vh;
+    margin-left: 3vw;
+    transform: translateY(0.1vh);
+}
+
+.task-info {
+    width: 90vw;
+    margin-bottom: 3vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-details {
+    font-size: 1rem;
+    field-sizing: content;
+    outline: none;
+    width: 93vw;
+    min-height: 6vh;
+    max-height: 65vh;
+    margin-top: 3vh;
+    margin-left: auto;
+    margin-right: auto;
+    background: transparent;
+    resize: none;
+    border: none;
+    border-bottom: 1px solid var(--task-details-input-border);
+    border-right: 1px solid var(--task-details-input-border);
+}
+
+.task-editor-footerbtns {
+    display: flex;
+    width: 93.5vw;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: end;
+}
+
+.footerbtn {
+    margin-top: 1vh;
+    margin-right: 1vh;
+    width: 5vh;
+    cursor: pointer;
+    user-select: none;
+}
+.footerbtn:hover {
+    background: white;
+    color: black!important;
+}
+
+#save-task-btn:hover {
+    color: white!important;
+    background: var(--save-task-btn-color);
+}
+#delete-task-btn:hover {
+    color: white!important;
+    background: var(--app-btn-delete-color);
+}
