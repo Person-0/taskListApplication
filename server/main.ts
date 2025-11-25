@@ -190,6 +190,30 @@ async function main() {
         res.send(JSON.stringify(result));
     })
 
+    app.get("/setMyTasks", async (req, res) => {
+        const qdata = ensureQuery(req, res, ["tasksdata"]);
+        const authResult = authorizeTokenFromReq(req, res);
+        if (!authResult) return;
+        if (qdata && qdata.tasksdata.length > 0) {
+            const result = await queries.setUserTasks(authResult.uid, qdata.tasksdata);
+            if(result) {
+                res.send(JSON.stringify({
+                    error: false
+                }));
+            } else {
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "set user tasks failed"
+                }));
+            }
+            return;
+        }
+        res.send(JSON.stringify({
+            error: true,
+            message: "invalid tasks data"
+        }));
+    })
+
     app.get("/logout", async (req, res) => {
         const authResult = authorizeTokenFromReq(req, res);
         if (!authResult) return;

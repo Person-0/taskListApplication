@@ -36,7 +36,7 @@ export class authTokenManager {
     generateToken(uid: number) {
         this._removeTokenRecord(uid);
         const newRecord: tokenRecord = {
-            uid,
+            uid: parseInt(uid.toString()), // ensuring uid is a number
             token: randomUUID(),
             createdAt: Date.now()
         }

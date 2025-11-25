@@ -33,12 +33,20 @@ class QueryBuilder {
         return `select username from ${this.tablename};`;
     }
 
+    getAllUIDs() {
+        return `select uid from ${this.tablename};`;
+    }
+
     getUserDataUID(uid: number) {
         return `select * from ${this.tablename} where uid = ${uid};`;
     }
 
     getUserDataUsername(username: string) {
         return `select * from ${this.tablename} where username = '${username}';`;
+    }
+
+    setUserTasks(uid: number, tasksdata: string) {
+        return `update ${this.tablename} set tasksdata = '${tasksdata}' where uid = ${uid}`;
     }
 }
 
@@ -87,6 +95,20 @@ class QueryExecutor {
         return exists;
     }
 
+    async doesUIDExist(uid: number) {
+        const result = await this.client.query(this.queryBuilder.getAllUIDs());
+        let exists = false;
+        if (this._validateArray(result.rows)) {
+            for (const row of result.rows) {
+                if (row && row.uid && parseInt(row.uid) === uid) {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+        return exists;
+    }
+
     async getUserData(from: 'uid' | 'username', uid_or_username: number | string) {
         let result: QueryResult<any> | undefined;
         if (from == "uid") {
@@ -117,6 +139,15 @@ class QueryExecutor {
             this.queryBuilder.addUser(username, password, tasksdata)
         );
         return await this.getUserData("uid", nextUID);
+    }
+
+    async setUserTasks(uid: number, tasksdata: string) {
+        if(await this.doesUIDExist(uid)){
+            return await this.client.query(this.queryBuilder.setUserTasks(uid, tasksdata));
+        } else {
+            console.warn("cannot set user tasks: uid does not exist: " + uid.toString());
+            return false;
+        }
     }
 
     _validateArray(e: any) {

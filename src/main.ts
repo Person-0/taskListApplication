@@ -1,7 +1,7 @@
 import "../html/index.css";
-import { ValidatorClass } from "../server/validator";
 import { APIClass } from "./api";
 import { loadTasks, loadTaskEditor } from "./tasks";
+import { toast } from "./toast";
 
 const API = new APIClass();
 
@@ -21,12 +21,25 @@ const _pageElementsSelectors = {
     "tasksList": ".tasks-list",
     "taskCheckbox": ".task-checkbox",
     "taskInfoDate": ".task-info-date",
-    "taskInfoSno": ".task-info-sno"
+    "taskInfoSno": ".task-info-sno",
+    "toastDisplay": "#toast-display",
+    "toastText": "#toast-text"
 }
 
 type tabName = "login" | "app" | "task-editor";
 type PageElementName = keyof typeof _pageElementsSelectors;
-export type pageElementsType = Record<PageElementName, HTMLElement>;
+export type pageElementsType = Record<PageElementName, HTMLElement | HTMLInputElement>;
+
+declare global {
+    interface Window {
+        switchTab: (tabName: string) => void;
+        taskView: (sno: number) => void;
+        taskDelete: (sno: number) => void;
+        taskCheckUpdate: (checkbox: HTMLInputElement, sno: number) => void;
+        loadApp(): Promise<void>;
+        pageElements: pageElementsType;
+    }
+}
 
 const pageElements = {} as pageElementsType;
 for (const [name, selector] of Object.entries(_pageElementsSelectors)) {
@@ -36,6 +49,7 @@ for (const [name, selector] of Object.entries(_pageElementsSelectors)) {
     } else {
         pageElements[name as PageElementName] = document.createElement("button");
         console.error("Button [" + name + "] with selector [" + selector + "] was not found.");
+        toast("pageElements were not resolved completely");
     }
 }
 
@@ -51,6 +65,7 @@ function switchTab(tabName: tabName) {
         toShowTab.style.display = "flex";
     } else {
         console.error("switchTab called with invalid tabName: ", tabName);
+        toast("switchTab was called with invalid parameters");
     }
 }
 
@@ -62,32 +77,15 @@ async function toggleLogin() {
     location.href = "/";
 }
 
-const validator = new ValidatorClass();
 const authorize = (type: 'login' | 'signup') => async () => {
-    const qparams = new URLSearchParams();
-
-    const authType = type === 'signup' ? '1' : '0';
-    qparams.append("authType", authType);
-
     const username = (pageElements.usernameInput as HTMLInputElement).value;
-    if (!(validator.username(username))) {
-        return;
-    }
-    qparams.append("username", username);
-
     const password = (pageElements.passwordInput as HTMLInputElement).value;
-    if (!(validator.password(password))) {
-        return;
-    }
-    qparams.append("password", password);
-
-    const response = await API.authorize(qparams.toString());
-
-    if (response.error) {
-        // creds invalid and stuff
-        console.log("authorize error: ", response.message);
-    } else {
-        if (response.token && response.tokenAge) {
+    const response = await API.authorize(username, password, type);
+    if (response) {
+        if (response.error) {
+            console.log("authorize error: ", response.message);
+            toast("Auth error: " + response.message);
+        } else if (response.token && response.tokenAge) {
             localStorage.setItem("token", response.token);
             localStorage.setItem("tokenExpiry", (Date.now() + parseInt(response.tokenAge)).toString());
             await loadApp();
@@ -108,6 +106,7 @@ async function loadApp() {
         switchTab("app");
     }
 }
+window.loadApp = loadApp;
 
 pageElements.login.onclick = authorize('login');
 pageElements.signup.onclick = authorize('signup');

@@ -1,5 +1,8 @@
 import { User } from "../server/queries";
 import { pageElementsType } from "./main";
+import { APIClass } from "./api";
+
+const API = new APIClass();
 
 interface Task {
     title: string;
@@ -9,7 +12,7 @@ interface Task {
     details: string;
 }
 
-let currentlyLoadedTasks: {[sno: number]: Task} = {};
+let currentlyLoadedTasks: { [sno: string]: Task } = {};
 
 function generateTaskListItem(task: Task) {
     return `
@@ -24,39 +27,89 @@ function generateTaskListItem(task: Task) {
     `;
 }
 
-Object.defineProperty(window, "taskView", {
-    value: function(sno: number) {
-        loadTaskEditor(currentlyLoadedTasks[sno]);
+window.taskView = function (sno: number) {
+    loadTaskEditor(currentlyLoadedTasks[sno]);
+}
+
+window.taskDelete = function (sno: number) {
+    if (currentlyLoadedTasks[sno]) {
+        delete currentlyLoadedTasks[sno];
     }
-})
+    updateTasksdata().then(() => location.reload());
+}
 
-Object.defineProperty(window, "taskDelete", {
-    value: function(sno: number) {
-        const task = currentlyLoadedTasks[sno];
-        // delete task
-        location.reload();
+window.taskCheckUpdate = function (checkbox: HTMLInputElement, sno: number) {
+    const isChecked = checkbox.checked;
+    currentlyLoadedTasks[sno].checked = isChecked;
+    updateTasksdata();
+}
+
+async function updateTasksdata() {
+    const tasksobject = Object.values(currentlyLoadedTasks);
+    const tasksdata = btoa(JSON.stringify(tasksobject));
+    const result = await API.setMyTasks(tasksdata);
+    if (result.error) {
+        alert("Error while updating tasks: " + result.message);
     }
-})
+}
 
-Object.defineProperty(window, "taskCheckUpdate", {
-    value: function(checkbox: HTMLInputElement, sno: number) {
-        const isChecked = checkbox.checked;
-        const task = currentlyLoadedTasks[sno];
-        // update check prop
+export function loadTaskEditor(loadTask: Task | undefined = undefined) {
+    const pageElements = window.pageElements;
+    let hasBeenSaved = !!loadTask;
+
+    let task = loadTask || {
+        date: getDateString(),
+        sno: getCurrentSno() + 1,
+        title: "",
+        checked: false,
+        details: ""
+    } as Task;
+
+    pageElements.taskInfoDate.innerHTML = task.date;
+    let snoString = task.sno.toString();
+    if (snoString.length < 10) {
+        snoString = "0" + snoString;
     }
-})
+    pageElements.taskInfoSno.innerHTML = snoString;
 
-export function loadTaskEditor(task: Task | undefined = undefined) {
-    if(task) {
+    const titleInput = pageElements.taskNameInput as HTMLInputElement;
+    const checkbox = pageElements.taskCheckbox as HTMLInputElement;
+    const detailsInput = pageElements.taskDetailsInput as HTMLInputElement;
 
-    } else {
+    titleInput.value = task.title;
+    checkbox.checked = task.checked;
+    detailsInput.value = task.details;
 
+    titleInput.onchange = () => {
+        task.title = titleInput.value;
     }
-    (window as any).switchTab("task-editor");
+    detailsInput.onchange = () => {
+        task.details = detailsInput.value;
+    }
+    checkbox.onchange = () => {
+        task.checked = checkbox.checked;
+    }
+
+    pageElements.saveTaskBtn.onclick = async () => {
+        if (titleInput.value.length > 0 && detailsInput.value.length > 0) {
+            currentlyLoadedTasks[task.sno] = task;
+            await updateTasksdata();
+            hasBeenSaved = true;
+            await window.loadApp();
+        }
+    }
+    pageElements.deleteTaskBtn.onclick = () => {
+        if (hasBeenSaved) {
+            window.taskDelete(task.sno);
+        }
+        window.switchTab("app");
+    }
+
+    window.switchTab("task-editor");
 }
 
 export function loadTasks(userdata: User) {
-    const pageElements = (window as any).pageElements as pageElementsType;
+    const pageElements = window.pageElements;
     let tasks: Task[];
     try {
         tasks = JSON.parse(atob(userdata.tasksdata));
@@ -67,9 +120,30 @@ export function loadTasks(userdata: User) {
     if (tasks.length > 0) {
         pageElements.noTasksDiv.style.display = "none";
         pageElements.tasksList.removeAttribute("style");
+        for(const child of Array.from(pageElements.tasksList.children)) {
+            if(!child.classList.contains("list-header")){
+                child.remove();
+            }
+        }
         for (const task of tasks) {
             pageElements.tasksList.insertAdjacentHTML("beforeend", generateTaskListItem(task));
             currentlyLoadedTasks[task.sno] = task;
         }
     }
+}
+
+function getCurrentSno() {
+    return Math.max(
+        Math.max(
+            ...Object.keys(currentlyLoadedTasks).map(e => parseInt(e))
+        ), 0
+    );
+}
+
+function getDateString() {
+    const date = new Date();
+    let day = date.getDay().toString().padStart(2, "0");
+    let month = date.getMonth().toString().padStart(2, "0");
+    let year = date.getFullYear().toString().slice(2, 4);
+    return [day, month, year].join("/");
 }
