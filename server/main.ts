@@ -236,7 +236,8 @@ async function main() {
     })
 
     log("starting API server...");
-    app.listen(process.env.API_PORT, () => {
-        log("listening on port", process.env.API_PORT);
+    const PORT = process.env.PORT || process.env.API_PORT;
+    app.listen(PORT, () => {
+        log("listening on port", PORT);
     })
 }

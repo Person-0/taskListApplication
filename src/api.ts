@@ -2,7 +2,7 @@ import { ValidatorClass } from "../server/validator";
 const validator = new ValidatorClass();
 
 export class APIClass {
-    api_url = "http://" + location.hostname + ":8080/api";
+    api_url = "https://" + location.hostname + "/api";
 
     _authedFetch(url: string) {
         return fetch(url, {
