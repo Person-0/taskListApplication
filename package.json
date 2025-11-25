@@ -7,7 +7,7 @@
     "start:server": "npm run build:server && node dist-server/main.js",
     "build:server": "tsup --config tsup.server.config.ts",
     "build": "npm run build:server && vite build",
-    "start:prod": "npm run build && npm run start:server prod"
+    "start:prod": "npm run start:server prod"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
