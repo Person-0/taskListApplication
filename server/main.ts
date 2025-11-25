@@ -94,6 +94,10 @@ async function main() {
 
     log("finished.");
 
+    app.get("/", (req, res) => {
+        res.send("hell0 w0rld");
+    })
+
     app.get("/authorize", async (req, res): Promise<any> => {
         const queryData = ensureQuery(req, res, ["username", "password", "authType"]);
         if (queryData) {
